@@ -382,6 +382,21 @@ const runTests = async () => {
     assertEqual(result.subject, 'Test Subject');
   });
 
+  await test('FeatureExtractor should remove excess whitespace from meta context', async () => {
+    const extractor = new FeatureExtractor();
+    const features = {
+      sender: '   test@example.com    ',
+      subject: '\n  Test Email     ',
+      markdown: '\n\nThis is  a **test**   email   body\n'
+    };
+    
+    const { context, truncatedContext } = extractor.extractMetaFeatures(features);
+    const expected = 'test@example.com Test Email This is a **test** email body';
+    
+    assertEqual(context, expected);
+    assertEqual(truncatedContext, expected);
+  });
+
   // Before GmailPreprocessor tests
   printTestSeparator('GmailPreprocessor');
 

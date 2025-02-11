@@ -1,7 +1,7 @@
-const { FeatureExtractor } = require('./featureExtraction.js');
-const { EMLPreprocessor, GmailPreprocessor } = require('./preprocessor.js');
+import { FeatureExtractor } from './featureExtraction.js';
+import { EMLPreprocessor, GmailPreprocessor } from './preprocessor.js';
 
-module.exports = {
+export {
   FeatureExtractor,
   GmailPreprocessor,
   EMLPreprocessor

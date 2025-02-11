@@ -1,9 +1,8 @@
-// Import the functions to test
-const { FeatureExtractor } = require('./index.js');
-const { GmailPreprocessor } = require('./index.js');
-const { GmailEmailDecoder } = require('./gmailDecoder.js');
-const { EMLPreprocessor } = require('./index.js');
-const { Base64 } = require('js-base64');
+import { FeatureExtractor } from './index.js';
+import { GmailPreprocessor } from './index.js';
+import { GmailEmailDecoder } from './gmailDecoder.js';
+import { EMLPreprocessor } from './index.js';
+import { Base64 } from 'js-base64';
 
 // Test suite
 const runTests = async () => {

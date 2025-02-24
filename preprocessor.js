@@ -33,6 +33,38 @@ class Preprocessor {
   }
 }
 
+class OutlookPreprocessor extends Preprocessor {
+  constructor() {
+    super();
+  }
+
+  /**
+   * @param {Object} email - The email to process.
+   * @returns {Object} The processed email.
+   */
+  process(email) {
+    const processed = {
+      id: email.id,
+      threadId: email.conversationId,
+      // TODO: Get labelIds.
+      labelIds: [],
+      // TODO: Get headers.
+      headers: {},
+      // Match google standard. Note that from is used instead of sender since sender can be a machine.
+      sender: `${email.from.emailAddress.name} <${email.from.emailAddress.address}>`,
+      subject: email.subject,
+      body: email.body.contentType === 'text' ? {
+        plain: email.body.content,
+      } : {
+        html: email.body.content
+      },
+      attachments: email.hasAttachments ? ['call listAttachments']: []
+    };
+
+    return processed;
+  }
+}
+
 class GmailPreprocessor extends Preprocessor {
   constructor() {
     super();
@@ -95,5 +127,6 @@ class EMLPreprocessor extends Preprocessor {
 export {
   Preprocessor,
   GmailPreprocessor,
-  EMLPreprocessor
+  EMLPreprocessor,
+  OutlookPreprocessor
 };

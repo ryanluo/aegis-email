@@ -3,7 +3,7 @@ import { GmailPreprocessor } from './index.js';
 import { GmailEmailDecoder } from './gmailDecoder.js';
 import { EMLPreprocessor } from './index.js';
 import { Base64 } from 'js-base64';
-
+import { OutlookPreprocessor } from './preprocessor.js';
 // Test suite
 const runTests = async () => {
   console.log('Starting tests...\n');
@@ -1034,6 +1034,103 @@ ortant;padding-bottom:0 !important;padding-right:0 !important;padding-left:=
       sender: 'no-reply@is.email.nextdoor.com',
       subject: 'New from Kim and other neighbors in San Francisco',
       attachments: []
+    });
+  });
+
+  // Before OutlookPreprocessor tests
+  printTestSeparator('OutlookPreprocessor');
+
+  await test('OutlookPreprocessor initialization', async () => {
+    const processor = new OutlookPreprocessor();
+    if (!processor) throw new Error('Failed to initialize OutlookPreprocessor');
+  });
+
+  await test('OutlookPreprocessor fails on empty message', async () => {
+    const processor = new OutlookPreprocessor();
+    const emptyMessage = {}
+    let error;
+    try {
+      const result = await processor.process(emptyMessage);
+    } catch (e) {
+      error = e.message;
+    }
+    assertEqual(error, "Cannot read properties of undefined (reading 'emailAddress')");
+  });
+
+  await test('OutlookPreprocessor handles real message', async () => {
+    const processor = new OutlookPreprocessor();
+    const sampleMessage = {
+        '@odata.context': "https://graph.microsoft.com/v1.0/$metadata#users('ryan%40crayonai.onmicrosoft.com')/messages/$entity",
+        '@odata.etag': 'W/"CQAAABYAAACkoyY9W6DoQ495gy4NbKSYAAAAAAb0"',
+        id: 'AQMkADM3OTBiYgEyLWIyZDItNDZkNS04NjdkLTFiZjk5ADFkMTk4ZDgARgAAAwFlHDrkD4pJiZdlibb1ALAHAKSjJj1boOhDj3mDLg1spJgAAAIBDAAAAKSjJj1boOhDj3mDLg1spJgAAAIBZgAAAA==',
+        createdDateTime: '2025-02-23T17:45:41Z',
+        lastModifiedDateTime: '2025-02-23T19:25:26Z',
+        changeKey: 'CQAAABYAAACkoyY9W6DoQ495gy4NbKSYAAAAAAb0',
+        categories: [],
+        receivedDateTime: '2025-02-23T17:45:41Z',
+        sentDateTime: '2025-02-23T17:45:35Z',
+        hasAttachments: false,
+        internetMessageId: '<2c2ac345-1385-4932-aee0-d1be0f7151ab@az.eastus2.microsoft.com>',
+        subject: 'Your Microsoft invoice G079480566 is ready',
+        bodyPreview: 'Sign in to review your latest invoice.\r\n' +
+          '\r\n' +
+          'Review your Microsoft invoice\r\n' +
+          '\r\n' +
+          'Your statement is ready for review. Sign in to view it. If you’ve already paid, disregard this email.\r\n' +
+          '\r\n' +
+          "If paying by credit card, we'll automatically charge the card we have on fi",
+        importance: 'normal',
+        parentFolderId: 'AQMkADM3OTBiYgEyLWIyZDItNDZkNS04NjdkLTFiZjk5ADFkMTk4ZDgALgAAAwFlHDrkD4pJiZdlibb1ALABAKSjJj1boOhDj3mDLg1spJgAAAIBDAAAAA==',
+        conversationId: 'AAQkADM3OTBiYmIyLWIyZDItNDZkNS04NjdkLTFiZjk5MWQxOThkOAAQAMusGpT5TSxOtGwCXBiLzXs=',
+        conversationIndex: 'AQHbhhrBy6walPlNLE60bAJcGIvNew==',
+        isDeliveryReceiptRequested: null,
+        isReadReceiptRequested: false,
+        isRead: false,
+        isDraft: false,
+        webLink: 'https://outlook.office365.com/owa/?ItemID=AQMkADM3OTBiYgEyLWIyZDItNDZkNS04NjdkLTFiZjk5ADFkMTk4ZDgARgAAAwFlHDrkD4pJiZdlibb1ALAHAKSjJj1boOhDj3mDLg1spJgAAAIBDAAAAKSjJj1boOhDj3mDLg1spJgAAAIBZgAAAA%3D%3D&exvsurl=1&viewmodel=ReadMessageItem',
+        inferenceClassification: 'focused',
+        body: {
+          contentType: 'html',
+          content: `<html lang="en" style="min-height:100%; background:#ffffff"><head>\r\n' +
+            '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width"><meta name="eventId" content="commercial-commerce-invoice-ready"><meta name="messageId" content="2c2ac345-1385-4932-aee0-d1be0f7151ab"><meta name="cloud" content="AZ"><style id="mediaqueries">\r\n' +
+            '<!--\r\n' +
+            '@media only screen and (max-width: 640px) \r\n' +
+            '.wrap-dangler\r\n' +
+            '\t{padding-right:10%!important}\r\n' +
+            '.wrap-dangler.small-text-center .wrap-dangler.text-center\r\n'
+            `
+        },
+        sender: {
+          emailAddress: { name: 'Microsoft', address: 'microsoft-noreply@microsoft.com' }
+        },
+        from: {
+          emailAddress: { name: 'Microsoft', address: 'microsoft-noreply@microsoft.com' }
+        },
+        toRecipients: [ { emailAddress: [Object] } ],
+        ccRecipients: [],
+        bccRecipients: [],
+        replyTo: [],
+        flag: { flagStatus: 'notFlagged' }
+    }
+    const result = await processor.process(sampleMessage);
+    partialEqual(result, {
+      id: 'AQMkADM3OTBiYgEyLWIyZDItNDZkNS04NjdkLTFiZjk5ADFkMTk4ZDgARgAAAwFlHDrkD4pJiZdlibb1ALAHAKSjJj1boOhDj3mDLg1spJgAAAIBDAAAAKSjJj1boOhDj3mDLg1spJgAAAIBZgAAAA==',
+      threadId: 'AAQkADM3OTBiYmIyLWIyZDItNDZkNS04NjdkLTFiZjk5MWQxOThkOAAQAMusGpT5TSxOtGwCXBiLzXs=',
+      labelIds: [],
+      headers: {},
+      sender: 'Microsoft <microsoft-noreply@microsoft.com>',
+      subject: 'Your Microsoft invoice G079480566 is ready',
+      body: {
+        html: `<html lang="en" style="min-height:100%; background:#ffffff"><head>\r\n' +
+            '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width"><meta name="eventId" content="commercial-commerce-invoice-ready"><meta name="messageId" content="2c2ac345-1385-4932-aee0-d1be0f7151ab"><meta name="cloud" content="AZ"><style id="mediaqueries">\r\n' +
+            '<!--\r\n' +
+            '@media only screen and (max-width: 640px) \r\n' +
+            '.wrap-dangler\r\n' +
+            '\t{padding-right:10%!important}\r\n' +
+            '.wrap-dangler.small-text-center .wrap-dangler.text-center\r\n'
+            `
+      },
+      attachments: [],
     });
   });
 

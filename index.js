@@ -1,8 +1,9 @@
 import { FeatureExtractor } from './featureExtraction.js';
-import { EMLPreprocessor, GmailPreprocessor } from './preprocessor.js';
+import { EMLPreprocessor, GmailPreprocessor, OutlookPreprocessor } from './preprocessor.js';
 
 export {
   FeatureExtractor,
   GmailPreprocessor,
-  EMLPreprocessor
+  EMLPreprocessor,
+  OutlookPreprocessor
 };

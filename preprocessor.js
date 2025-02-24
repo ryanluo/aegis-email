@@ -45,6 +45,7 @@ class OutlookPreprocessor extends Preprocessor {
   process(email) {
     const processed = {
       id: email.id,
+      date: email.createdDateTime,
       threadId: email.conversationId,
       // TODO: Get labelIds.
       labelIds: [],

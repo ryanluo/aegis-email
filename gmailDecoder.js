@@ -10,6 +10,7 @@ class GmailEmailDecoder {
     try {
       const decodedEmail = {
         id: message.id,
+        date: new Date(Number(message.internalDate)).toISOString(),
         threadId: message.threadId,
         labelIds: message.labelIds || [],
         headers: {},

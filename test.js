@@ -62,6 +62,7 @@ const runTests = async () => {
       id: 'test123',
       threadId: 'thread123',
       labelIds: ['INBOX', 'UNREAD'],
+      internalDate: '1714124741000',
       payload: {
         headers: [
           { name: 'From', value: 'sender@example.com' },
@@ -89,6 +90,7 @@ const runTests = async () => {
     const decodedEmail = GmailEmailDecoder.decodeEmail(mockMessage);
     assertEqual(decodedEmail, {
       id: 'test123',
+      date: '2024-04-26T09:45:41.000Z',
       threadId: 'thread123',
       labelIds: ['INBOX', 'UNREAD'],
       headers: {
@@ -116,6 +118,7 @@ const runTests = async () => {
   await test('should handle email with no parts', async () => {
     const mockMessage = {
       id: 'test123',
+      internalDate: '1714124741000',
       threadId: 'thread123',
       labelIds: ['INBOX'],
       payload: {
@@ -130,6 +133,7 @@ const runTests = async () => {
     const decodedEmail = GmailEmailDecoder.decodeEmail(mockMessage);
     assertEqual(decodedEmail, {
       id: 'test123',
+      date: '2024-04-26T09:45:41.000Z',
       threadId: 'thread123',
       labelIds: ['INBOX'],
       headers: { subject: 'Simple Email' },
@@ -147,6 +151,7 @@ const runTests = async () => {
     const mockMessage = {
       id: 'test123',
       threadId: 'thread123',
+      internalDate: '1714124741000',
       payload: {
         headers: [],
         parts: [{
@@ -190,6 +195,7 @@ const runTests = async () => {
   await test('should handle missing or empty fields', async () => {
     const mockMessage = {
       id: 'test123',
+      internalDate: '1714124741000',
       payload: {
         headers: [],
         parts: []
@@ -199,6 +205,7 @@ const runTests = async () => {
     const decodedEmail = GmailEmailDecoder.decodeEmail(mockMessage);
     assertEqual(decodedEmail, {
       id: 'test123',
+      date: '2024-04-26T09:45:41.000Z',
       threadId: undefined,
       labelIds: [],
       headers: {},
@@ -215,6 +222,7 @@ const runTests = async () => {
   await test('should correctly parse sender and subject from headers', async () => {
     const mockMessage = {
       id: 'test123',
+      internalDate: '1714124741000',
       payload: {
         headers: [
           { name: 'From', value: 'John Doe <john@example.com>' },
@@ -409,6 +417,7 @@ const runTests = async () => {
     const email = {
       data: {
         id: 'test123',
+        internalDate: '1714124741000',
         threadId: 'thread123',
         labelIds: ['INBOX', 'UNREAD'],
         payload: {
@@ -1115,6 +1124,7 @@ ortant;padding-bottom:0 !important;padding-right:0 !important;padding-left:=
     const result = await processor.process(sampleMessage);
     partialEqual(result, {
       id: 'AQMkADM3OTBiYgEyLWIyZDItNDZkNS04NjdkLTFiZjk5ADFkMTk4ZDgARgAAAwFlHDrkD4pJiZdlibb1ALAHAKSjJj1boOhDj3mDLg1spJgAAAIBDAAAAKSjJj1boOhDj3mDLg1spJgAAAIBZgAAAA==',
+      date: '2025-02-23T17:45:41Z',
       threadId: 'AAQkADM3OTBiYmIyLWIyZDItNDZkNS04NjdkLTFiZjk5MWQxOThkOAAQAMusGpT5TSxOtGwCXBiLzXs=',
       labelIds: [],
       headers: {},

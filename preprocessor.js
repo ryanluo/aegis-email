@@ -9,6 +9,7 @@ class Preprocessor {
    * @param {Object} email - The email to process.
    * @returns {
    *  id: string,
+   *  date: string,
    *  threadId: string,
    *  labelIds: string[],
    *  headers: {

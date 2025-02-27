@@ -53,7 +53,7 @@ class OutlookPreprocessor extends Preprocessor {
       // TODO: Get headers.
       headers: {},
       // Match google standard. Note that from is used instead of sender since sender can be a machine.
-      sender: `${email.from.emailAddress.name} <${email.from.emailAddress.address}>`,
+      sender: `${email.from?.emailAddress?.name} <${email.from?.emailAddress?.address}>`,
       subject: email.subject,
       body: email.body.contentType === 'text' ? {
         plain: email.body.content,

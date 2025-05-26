@@ -99,6 +99,7 @@ class EMLPreprocessor extends Preprocessor {
           // Convert EML format to match preprocessor format
           const processed = {
             id: Date.now().toString(), // Generate a unique ID since EML doesn't have one
+            date: emlJson.date,
             threadId: '', // Does not need a threadId
             labelIds: [], // EML doesn't have labels
             headers: emlJson.headers,

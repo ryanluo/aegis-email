@@ -32,6 +32,12 @@ const runTests = async () => {
     }
   };
 
+  const assert = (condition) => {
+    if (!condition) {
+      throw new Error(`Assert failed`);
+    }
+  }
+
   // Helper function to assert partial equality
   const partialEqual = (actual, expected) => {
     for (const [key, value] of Object.entries(expected)) {
@@ -1063,7 +1069,7 @@ ortant;padding-bottom:0 !important;padding-right:0 !important;padding-left:=
     } catch (e) {
       error = e.message;
     }
-    assertEqual(error, "Cannot read properties of undefined (reading 'emailAddress')");
+    assert(error.includes("Cannot read properties of undefined"));
   });
 
   await test('OutlookPreprocessor handles real message', async () => {

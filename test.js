@@ -1046,6 +1046,7 @@ ortant;padding-bottom:0 !important;padding-right:0 !important;padding-left:=
       From: 'Nextdoor <no-reply@is.email.nextdoor.com>'
     });
     partialEqual(result, {
+      to: 'rllluo@gmail.com',
       date: '2024-12-22T06:32:58.000Z',
       sender: 'no-reply@is.email.nextdoor.com',
       subject: 'New from Kim and other neighbors in San Francisco',

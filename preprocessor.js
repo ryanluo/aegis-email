@@ -89,13 +89,13 @@ class EMLPreprocessor extends Preprocessor {
 
   process(eml) {
     const promise = new Promise((resolve, reject) => {
-      readEml(eml, (err, emlJson) => {
-        if (err) {
-          reject(new Error(`Failed to process EML: ${err.message}`));
-          return;
-        }
+      try {
+        readEml(eml, (err, emlJson) => {
+          if (err) {
+            reject(new Error(`Failed to process EML: ${err.message}`));
+            return;
+          }
 
-        try {
           // Convert EML format to match preprocessor format
           const processed = {
             id: Date.now().toString(), // Generate a unique ID since EML doesn't have one
@@ -119,10 +119,10 @@ class EMLPreprocessor extends Preprocessor {
           };
 
           resolve(processed);
-        } catch (error) {
-          reject(new Error(`Failed to process EML structure: ${error.message}`));
-        }
-      });
+        });
+      } catch (error) {
+        reject(new Error(`Failed to process EML structure: ${error.message}`));
+      }
     });
     return promise.then(result => { return result; });
   }
